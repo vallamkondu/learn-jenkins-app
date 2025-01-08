@@ -20,11 +20,17 @@ pipeline {
                '''
             }
         }
-        stage('with docker') {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
             steps {
-                sh '''echo "Hello world with docker"
-                touch container-yes.txt
-                ls -ltra
+                sh '''
+                    test -f build/index.html
+                    npm test
                 '''
                 
             }
